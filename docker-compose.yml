@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+    reverse-proxy:
+        build: 'reverse-proxy/'
+        container_name: 'jtq_reverse_proxy'
+        image: jump-the-queue/reverse-proxy:latest
+        ports:
+            - '80:80'
+            - '443:80'
+        networks:
+            - jump-the-queue
+        depends_on:
+            - java
+            - angular
+
+    angular:
+        build: 'angular/'
+        container_name: 'jtq_angular'
+        image: jump-the-queue/angular:latest
+        networks:
+            - jump-the-queue
+
+    java:
+        build: 'java/'
+        container_name: 'jtq_java'
+        image: jump-the-queue/java:latest
+        networks:
+            - jump-the-queue
+
+networks:
+    jump-the-queue:
+        driver: bridge
