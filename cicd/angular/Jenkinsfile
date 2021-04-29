@@ -3,6 +3,7 @@ pipeline {
     
     tools {
         nodejs "nodejs"
+        maven "maven"
     }
 
     options{
@@ -38,7 +39,7 @@ pipeline {
                     def scannerHome = tool sonarTool
                     def props = readJSON file: 'package.json'
                     withSonarQubeEnv(sonarEnv) {
-                        sh """${scannerHome}/bin/sonar-scanner"""
+                        sh """mvn clean package sonar:sonar"""
                     }
                 }
             }
