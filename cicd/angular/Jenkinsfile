@@ -38,8 +38,7 @@ pipeline {
                     def scannerHome = tool sonarTool
                     withSonarQubeEnv(sonarEnv) {
                         sh """${scannerHome}/bin/sonar-scanner \
-                            -Dsonar.projectKey=angular \
-                            -Dsonar.language=java
+                            -Dsonar.projectKey=angular
                         """
                     }
                 }
