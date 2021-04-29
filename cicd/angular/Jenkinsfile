@@ -16,7 +16,7 @@ pipeline {
 
         srcDir = 'src'
 
-        sonarTool = 'SonarScanner' type:'hudson.plugins.sonar.SonarRunnerInstallation'
+        sonarTool = 'SonarScanner'
 
         sonarEnv = "SonarQube"
 
