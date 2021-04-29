@@ -39,7 +39,7 @@ pipeline {
                     withSonarQubeEnv(sonarEnv) {
                         sh """${scannerHome}/bin/sonar-scanner \
                             -Dsonar.projectKey=angular \
-                            -Dsonar.languaje=java
+                            -Dsonar.language=java
                         """
                     }
                 }
