@@ -1,0 +1,71 @@
+pipeline {
+    agent any
+
+    options{
+        disableConcurrentBuilds()
+    }
+
+    tools {
+        nodejs "NodeJS 12.16.1"
+    }
+
+    environment {
+        buildScript = 'build --configuration=docker'
+
+        angularDir = 'angular'
+
+        srcDir = 'src'
+
+        sonarTool = 'SonarScanner'
+
+        sonarEnv = "SonarQube"
+
+        dockerTool = 'docker-global'
+    }
+
+    stages {
+        stage ('Loading Custom Tools') {
+            tool dockerTool
+        }
+
+        stage ('Install Application') {
+            steps {
+                dir(angularDir) {
+                    sh """npm install"""
+                }
+            }
+        }
+
+        stage ('SonarQube Code Analysis') {
+            steps {
+                script {
+                    def scannerHome = tool sonarTool
+                    def props = readJSON file: 'package.json'
+                    withSonarQubeEnv(sonarEnv) {
+                        sh """
+                            ${scannerHome}/bin/sonar-scanner \
+                                -Dsonar.projectKey=${props.name} \
+                                -Dsonar.projectName=${props.name} \
+                                -Dsonar.projectVersion=${props.version} \
+                                -Dsonar.sources=${srcDir}
+                        """
+                    }
+                }
+            }
+        }
+
+        stage ('Build Application') {
+            steps {
+                dir(angularDir) {
+                    sh """npm run build"""
+                }
+            }
+        }
+
+        stage ('Create The Docker Image') {
+            di(angularDir) {
+                sh """docker build -t jump-the-queue/angular ."""
+            }
+        }
+    }
+}

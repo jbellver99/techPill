@@ -9,29 +9,33 @@ services:
             - '50000:50000'
         container_name: 'jenkins'
         networks:
-            - jenkins
+            - cicd
 
     sonarqube:
         image: sonarqube:latest
         container_name: 'sonarqube'
+        depends_on:
+            - db
         ports:
             - '9000:9000'
         networks:
-            - jenkins
+            - cicd
         environment:
-            - sonar.jdbc.url=jdbc:postgresql://db:5432/sonar
+            - SONAR_JDBC_URL=jdbc:postgresql://db:5432/sonar
+            - SONAR_JDBC_USERNAME=sonar
+            - SONAR_JDBC_PASSWORD=sonar
 
     db:
         image: postgres
         container_name: 'db'
         networks:
-            - jenkins
+            - cicd
         environment:
             - POSTGRES_USER=sonar
             - POSTGRES_PASSWORD=sonar
 
 networks:
-    jenkins:
+    cicd:
         driver: bridge
 
 
