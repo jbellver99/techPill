@@ -36,8 +36,11 @@ pipeline {
             steps {
                 script {
                     def scannerHome = tool sonarTool
+                    def props = readJSON file: 'package.json'
                     withSonarQubeEnv(sonarEnv) {
-                        sh """${scannerHome}/bin/sonar-scanner"""
+                        sh """${scannerHome}/bin/sonar-scanner \
+                            -Dsonar.projectKey=${props.name}
+                        """
                     }
                 }
             }
