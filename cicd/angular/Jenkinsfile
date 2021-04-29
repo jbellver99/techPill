@@ -3,7 +3,6 @@ pipeline {
     
     tools {
         nodejs "nodejs"
-        maven "maven"
     }
 
     options{
@@ -17,7 +16,7 @@ pipeline {
 
         srcDir = 'src'
 
-        sonarTool = 'SonarScanner'
+        sonarTool = 'SonarScanner' type:'hudson.plugins.sonar.SonarRunnerInstallation'
 
         sonarEnv = "SonarQube"
 
@@ -39,7 +38,7 @@ pipeline {
                     def scannerHome = tool sonarTool
                     def props = readJSON file: 'package.json'
                     withSonarQubeEnv(sonarEnv) {
-                        sh """mvn clean package sonar:sonar"""
+                        sh """${scannerHome}/bin/sonar_scanner"""
                     }
                 }
             }
