@@ -5,10 +5,6 @@ pipeline {
         disableConcurrentBuilds()
     }
 
-    tools {
-        nodejs "NodeJS 12.16.1"
-    }
-
     environment {
         buildScript = 'build --configuration=docker'
 
@@ -25,7 +21,9 @@ pipeline {
 
     stages {
         stage ('Loading Custom Tools') {
-            tool dockerTool
+            steps {
+                tool dockerTool
+            }
         }
 
         stage ('Install Application') {
@@ -63,8 +61,10 @@ pipeline {
         }
 
         stage ('Create The Docker Image') {
-            di(angularDir) {
-                sh """docker build -t jump-the-queue/angular ."""
+            steps {
+                dir(angularDir) {
+                    sh """docker build -t jump-the-queue/angular ."""
+                }
             }
         }
     }
