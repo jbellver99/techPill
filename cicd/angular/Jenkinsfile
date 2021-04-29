@@ -20,12 +20,6 @@ pipeline {
     }
 
     stages {
-        stage ('Loading Custom Tools') {
-            steps {
-                tool dockerTool
-            }
-        }
-
         stage ('Install Application') {
             steps {
                 dir(angularDir) {
