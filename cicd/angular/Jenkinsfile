@@ -61,6 +61,7 @@ pipeline {
                         tool dockerTool
                         docker.withTool(dockerTool) {
                             def image = docker.build("jump-the-queue/angular")
+                            sh"""docker images"""
                         }
                     }
                 }
