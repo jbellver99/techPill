@@ -57,8 +57,8 @@ pipeline {
         stage ('Create The Docker Image') {
             steps {
                 script {
-                    tool dockerTool
                     dir(angularDir) {
+                        tool dockerTool
                         def image = docker.build("jump-the-queue/angular")
                         image.push()
                         image.push("latest")
