@@ -59,7 +59,6 @@ pipeline {
                 script {
                     dir(angularDir) {
                         docker.withTool(dockerTool) {
-                            sh """docker version"""
                             def image = docker.build("jump-the-queue/angular")
                             image.push()
                             image.push("latest")
