@@ -58,7 +58,8 @@ pipeline {
             steps {
                 script {
                     dir(angularDir) {
-                        tool dockerTool
+                        def dockerHome = tool dockerTool
+                        env.PATH = "${dockerHome}/bin:${env.PATH}"
                         def image = docker.build("jump-the-queue/angular")
                         image.push()
                         image.push("latest")
