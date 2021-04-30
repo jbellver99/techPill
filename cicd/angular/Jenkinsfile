@@ -3,7 +3,6 @@ pipeline {
     
     tools {
         nodejs "nodejs"
-        docker "docker"
     }
 
     options{
@@ -21,7 +20,7 @@ pipeline {
 
         sonarEnv = "SonarQube"
 
-        dockerTool = 'docker-global'
+        dockerTool = 'docker'
     }
 
     stages {
@@ -58,6 +57,7 @@ pipeline {
         stage ('Create The Docker Image') {
             steps {
                 script {
+                    tool dockerTool
                     dir(angularDir) {
                         sh """docker build -t jump-the-queue/angular ."""
                     }
