@@ -57,7 +57,6 @@ pipeline {
         stage ('Create The Docker Image') {
             steps {
                 script {
-                    tool dockerTool
                     dir(angularDir) {
                         sh """docker build -t jump-the-queue/angular ."""
                     }
