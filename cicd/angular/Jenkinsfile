@@ -59,7 +59,9 @@ pipeline {
                 script {
                     tool dockerTool
                     dir(angularDir) {
-                        sh """docker build -t jump-the-queue/angular ."""
+                        def image = docker.build("jump-the-queue/angular")
+                        image.push()
+                        image.push("latest")
                     }
                 }
             }
