@@ -78,6 +78,7 @@ pipeline {
                                     -DrepositoryId=${repositoryId} \
                                     -Durl=${nexusUrl}
                             """
+                        }
                     }
                 }
             }
