@@ -26,7 +26,7 @@ pipeline {
 
         repositoryId = 'Jump-The-Queue'
 
-        nexusUrl = 'http://nexus:8088'
+        nexusUrl = 'http://localhost:8088'
     }
 
     stages {
