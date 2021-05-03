@@ -68,7 +68,7 @@ pipeline {
             steps {
                 script {
                     dir(angularDir) {
-                        def props = readJson file: 'package.json'
+                        def props = readJSON file: 'package.json'
                         sh """rm -f ${props.name}.zip"""
                         zip dir: 'dist/', zipFile: """${props.name}.zip"""
                         withMaven(globalMavenSettingsConfig: globalSettingsId, maven: mavenInstallation) {
