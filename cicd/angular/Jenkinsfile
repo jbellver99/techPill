@@ -71,17 +71,21 @@ pipeline {
                         def props = readJSON file: 'package.json'
                         sh """rm -f ${props.name}.zip"""
                         zip dir: 'dist/', zipFile: """${props.name}.zip"""
-                        withMaven(globalMavenSettingsConfig: globalSettingsId, maven: mavenInstallation) {
-                            sh """mvn deploy:deploy-file \
-                                -DgroupId=${groupId} \
-                                -DartifactId=${props.name} \
-                                -Dversion=${props.version}-SNAPSHOT \
-                                -Dpackaging=zip \
-                                -Dfile=${props.name}.zip \
-                                -DrepositoryId=${repositoryId} \
-                                -Durl=${repositoryUrl}
-                            """
-                        }
+                        nexusArtifactUploader artifacts: [
+                            [
+                                artifactId: ${props.name}, 
+                                classifier: '', 
+                                file: ${props.name}.zip, 
+                                type: 'zip'
+                            ]
+                        ], 
+                            credentialsId: 'nexus', 
+                            groupId: groupId, 
+                            nexusUrl: nexusUrl, 
+                            nexusVersion: 'nexus3', 
+                            protocol: 'http', 
+                            repository: repositoryId, 
+                            version: ${props.version}
                     }
                 }
             }
