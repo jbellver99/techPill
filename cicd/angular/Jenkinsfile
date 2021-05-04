@@ -69,9 +69,9 @@ pipeline {
                         zip dir: 'dist/', zipFile: """${props.name}.zip"""
                         nexusArtifactUploader artifacts: [
                             [
-                                artifactId: 'angular', 
+                                artifactId: "${props.name}", 
                                 classifier: '', 
-                                file: 'angular.zip', 
+                                file: "${props.name}.zip", 
                                 type: 'zip'
                             ]
                         ], 
@@ -81,7 +81,7 @@ pipeline {
                             nexusVersion: 'nexus3', 
                             protocol: 'http', 
                             repository: repositoryId, 
-                            version: '0.0.0'
+                            version: "${props.version}"
                     }
                 }
             }
