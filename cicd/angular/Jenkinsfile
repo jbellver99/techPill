@@ -78,8 +78,10 @@ pipeline {
                 script {
                     dir(angularDir) {
                         tool dockertTool
-                        sh 'docker login '
-                        sh 'docker push jump-the-queue/angular'
+                        docker.withTool(dockerTool) {
+                            sh 'docker login '
+                            sh 'docker push jump-the-queue/angular'
+                        }
                     }
                 }
             }
