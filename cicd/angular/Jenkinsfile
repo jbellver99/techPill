@@ -60,33 +60,6 @@ pipeline {
             }
         }
 
-        stage ('Deliver Application Into Nexus') {
-            steps {
-                script {
-                    dir(angularDir) {
-                        def props = readJSON file: 'package.json'
-                        sh """rm -f ${props.name}.zip"""
-                        zip dir: 'dist/', zipFile: """${props.name}.zip"""
-                        nexusArtifactUploader artifacts: [
-                            [
-                                artifactId: "${props.name}", 
-                                classifier: '', 
-                                file: "${props.name}.zip", 
-                                type: 'zip'
-                            ]
-                        ], 
-                            credentialsId: 'nexus', 
-                            groupId: groupId, 
-                            nexusUrl: nexusUrl, 
-                            nexusVersion: 'nexus3', 
-                            protocol: 'http', 
-                            repository: repositoryId, 
-                            version: "${props.version}"
-                    }
-                }
-            }
-        }
-
         stage ('Create The Docker Image') {
             steps {
                 script {
@@ -95,6 +68,18 @@ pipeline {
                         docker.withTool(dockerTool) {
                             def image = docker.build("jump-the-queue/angular")
                         }
+                    }
+                }
+            }
+        }
+        
+        stage ('Deliver Image Into Nexus') {
+            steps {
+                script {
+                    dir(angularDir) {
+                        tool dockertTool
+                        sh 'docker login '
+                        sh 'docker push jump-the-queue/angular'
                     }
                 }
             }
