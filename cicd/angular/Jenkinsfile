@@ -80,8 +80,8 @@ pipeline {
                         def props = readJSON file: 'package.json'
                         tool dockerTool
                         docker.withTool(dockerTool) {
-                            sh """docker tag jump-the-queue/angular nexus:8081/Jump-The-Queue:${props.version}"""
-                            sh """docker push nexus:8081/Jump-The-Queue:${props.version}"""
+                            sh """docker tag jump-the-queue/angular nexus:8081/angular:${props.version}"""
+                            sh """docker push nexus:8081/angular:${props.version}"""
                         }
                     }
                 }
