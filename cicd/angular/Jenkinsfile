@@ -20,13 +20,17 @@ pipeline {
 
         sonarEnv = "SonarQube"
 
-        dockerTool = 'docker'
-
         groupId = 'com.devonfw.jtqj'
 
         repositoryId = 'Jump-The-Queue'
 
-        nexusUrl = 'nexus:8081'
+        nexusUrl = 'http://nexus:8081'
+        
+        dockerRegistryCredentials = 'nexus'
+        
+        dockerRegistryProtocol = 'http://'
+        
+        dockerTool = 'docker'
     }
 
     stages {
@@ -60,28 +64,14 @@ pipeline {
             }
         }
 
-        stage ('Create The Docker Image') {
+        stage ('Create The Docker Image & Upload To Nexus') {
             steps {
                 script {
                     dir(angularDir) {
                         tool dockerTool
-                        docker.withTool(dockerTool) {
+                        docker.withRegistry(nexusUrl, dockerRegistryCredentials) {
                             def image = docker.build("jump-the-queue/angular")
-                        }
-                    }
-                }
-            }
-        }
-        
-        stage ('Deliver Image Into Nexus') {
-            steps {
-                script {
-                    dir(angularDir) {
-                        def props = readJSON file: 'package.json'
-                        tool dockerTool
-                        docker.withTool(dockerTool) {
-                            sh """docker tag jump-the-queue/angular nexus:8081/jump-the-queue:${props.version}"""
-                            sh """docker push nexus:8081/jump-the-queue:${props.version}"""
+                            image.push()
                         }
                     }
                 }
