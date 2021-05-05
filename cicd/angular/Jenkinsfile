@@ -41,12 +41,17 @@ pipeline {
         stage ('SonarQube Code Analysis') {
             steps {
                 script {
-                    def scannerHome = tool sonarTool
-                    withSonarQubeEnv(sonarEnv) {
-                        sh """${scannerHome}/bin/sonar-scanner \
-                            -Dsonar.projectKey=angular \
-                            -Dsonar.sources=${srcDir}
-                        """
+                    dir(angularDir) {
+                        def props = readJSON file: 'package.json'
+                        def scannerHome = tool sonarTool
+                        withSonarQubeEnv(sonarEnv) {
+                            sh """${scannerHome}/bin/sonar-scanner \
+                                -Dsonar.projectKey=${props.name} \
+                                -Dsonar.projectName=${props.name} \
+                                -Dsonar.projectVersion=${props.version} \
+                                -Dsonar.sources=${srcDir}
+                            """
+                        }
                     }
                 }
             }
@@ -77,10 +82,11 @@ pipeline {
             steps {
                 script {
                     dir(angularDir) {
-                        tool dockertTool
+                        def props = readJSON file: 'package.json'
+                        tool dockerTool
                         docker.withTool(dockerTool) {
-                            sh 'docker login '
-                            sh 'docker push jump-the-queue/angular'
+                            sh """docker tag jump-the-queue/angular nexus:8081/Jump-The-Queue:${props.version}"""
+                            sh """docker push nexus:8081/Jump-The-Queue:${props.version}"""
                         }
                     }
                 }
