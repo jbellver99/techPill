@@ -41,17 +41,12 @@ pipeline {
         stage ('SonarQube Code Analysis') {
             steps {
                 script {
-                    dir(angularDir) {
-                        def props = readJSON file: 'package.json'
-                        def scannerHome = tool sonarTool
-                        withSonarQubeEnv(sonarEnv) {
-                            sh """${scannerHome}/bin/sonar-scanner \
-                                -Dsonar.projectKey=${props.name} \
-                                -Dsonar.projectName=${props.name} \
-                                -Dsonar.projectVersion=${props.version} \
-                                -Dsonar.sources=${srcDir}
-                            """
-                        }
+                    def scannerHome = tool sonarTool
+                    withSonarQubeEnv(sonarEnv) {
+                        sh """${scannerHome}/bin/sonar-scanner \
+                            -Dsonar.projectKey=angular \
+                            -Dsonar.sources=${srcDir}
+                        """
                     }
                 }
             }
