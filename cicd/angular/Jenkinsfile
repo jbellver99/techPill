@@ -24,11 +24,9 @@ pipeline {
 
         repositoryId = 'Jump-The-Queue'
 
-        nexusUrl = 'http://nexus:8081'
+        nexusUrl = 'nexus:8085'
         
         dockerRegistryCredentials = 'nexus'
-        
-        dockerRegistryProtocol = 'http://'
         
         dockerTool = 'docker'
     }
@@ -70,7 +68,7 @@ pipeline {
                     dir(angularDir) {
                         tool dockerTool
                         docker.withRegistry(nexusUrl, dockerRegistryCredentials) {
-                            def image = docker.build("jump-the-queue/angular")
+                            def image = docker.build(nexusUrl"/angular")
                             image.push()
                         }
                     }
