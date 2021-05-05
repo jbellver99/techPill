@@ -68,7 +68,7 @@ pipeline {
                     dir(angularDir) {
                         tool dockerTool
                         docker.withRegistry(nexusUrl, dockerRegistryCredentials) {
-                            def image = docker.build(nexusUrl"/angular")
+                            def image = docker.build("nexus:8085/angular")
                             image.push()
                         }
                     }
