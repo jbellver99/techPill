@@ -22,9 +22,9 @@ pipeline {
 
         groupId = 'com.devonfw.jtqj'
 
-        repositoryId = 'Jump-The-Queue'
+        repositoryId = 'jump-the-queue'
 
-        nexusUrl = 'nexus:8085'
+        nexusUrl = 'http://nexus:8085/repository/jump-the-queue'
         
         dockerRegistryCredentials = 'nexus'
         
