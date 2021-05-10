@@ -24,7 +24,7 @@ pipeline {
 
         repositoryId = 'jump-the-queue'
 
-        nexusUrl = 'http://localhost:8082/repository/jump-the-queue/'
+        nexusUrl = 'http://localhost:8090/repository/jump-the-queue/'
         
         dockerRegistryCredentials = 'nexus'
         
