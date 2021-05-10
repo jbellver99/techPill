@@ -39,9 +39,12 @@ services:
     nexus:
         image: sonatype/nexus3
         ports:
-            - '8088:8081'
+            - '8081:8081'
+            - '8090:8082'
         networks:
             - cicd
+        volumes:
+            - /nexus-data:/nexus-data
 
 networks:
     cicd:
