@@ -71,7 +71,7 @@ pipeline {
                             sh """docker version"""
                             docker.withRegistry(nexusUrl, dockerRegistryCredentials) {
                                 def image = docker.build("localhost:8082/repository/jump-the-queue/angular")
-                                image.push()
+                                image.push("latest")
                             }
                         }
                     }
