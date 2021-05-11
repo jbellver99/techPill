@@ -41,12 +41,10 @@ pipeline {
         stage ('SonarQube Code Analysis') {
             steps {
                 script {
-                        def scannerHome = tool sonarTool
+                    dir(javaDir) {
                         withSonarQubeEnv(sonarEnv) {
-                        sh """${scannerHome}/bin/sonar-scanner \
-                            -Dsonar.projectKey=java \
-                            -Dsonar.sources=${srcDir}
-                        """
+                            sh """mvn sonar:sonar"""
+                        }
                     }
                 }
             }
