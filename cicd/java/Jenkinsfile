@@ -65,7 +65,7 @@ pipeline {
                         tool dockerTool
                         docker.withTool(dockerTool) {
                             docker.withRegistry(nexusUrl, dockerRegistryCredentials) {
-                                def image = docker.buil("java")
+                                def image = docker.build("java")
                                 image.push("latest")
                             }
                         }
