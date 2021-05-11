@@ -8,6 +8,8 @@ pipeline {
     environment {
         javaDir = 'java/jtqj'
 
+        srcDir = 'java/jtqj/src'
+
         sonarTool = 'SonarScanner'
 
         sonarEnv = "SonarQube"
@@ -44,7 +46,7 @@ pipeline {
                         withSonarQubeEnv(sonarEnv) {
                             sh """${scannerHome}/bin/sonar-scanner \
                                 -Dsonar.projectKey=java \
-                                -Dsonar.sources=.
+                                -Dsonar.sources=${srcDir}
                             """
                         }
                     }
