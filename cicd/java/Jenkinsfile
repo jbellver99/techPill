@@ -1,37 +1,38 @@
 pipeline {
     agent any
-    
-    tools {
-        nodejs "nodejs"
-        maven "maven"
-    }
 
-    options{
-        disableConcurrentBuilds()
+    tools {
+        maven "maven"
+        jdk "OpenJDK11"
     }
 
     environment {
-
-        angularDir = 'angular'
-
-        srcDir = 'angular/src'
+        javarDir = 'java/jtqj'
 
         sonarTool = 'SonarScanner'
 
         sonarEnv = "SonarQube"
 
         nexusUrl = 'http://localhost:8090/repository/jump-the-queue/'
-        
+
         dockerRegistryCredentials = 'nexus'
-        
+
         dockerTool = 'docker'
     }
 
     stages {
         stage ('Install Application') {
             steps {
-                dir(angularDir) {
-                    sh """npm install"""
+                dir(javarDir) {
+                    sh """mvn clean install"""
+                }
+            }
+        }
+
+        stage ('Unit Tests') {
+            steps {
+                dir(javarDir) {
+                    sh """mvn clean test"""
                 }
             }
         }
@@ -41,9 +42,9 @@ pipeline {
                 script {
                     def scannerHome = tool sonarTool
                     withSonarQubeEnv(sonarEnv) {
-                        sh """${scannerHome}/bin/sonar-scanner \
-                            -Dsonar.projectKey=angular \
-                            -Dsonar.sources=${srcDir}
+                        sh """${sonarHome}/bin/sonar-scanner \
+                            -Dsonar.projectKey=java \
+                            -Dsonar.sources=${javaDir}
                         """
                     }
                 }
@@ -52,8 +53,8 @@ pipeline {
 
         stage ('Build Application') {
             steps {
-                dir(angularDir) {
-                    sh """npm run build"""
+                dir(javaDir) {
+                    sh """mvn clean package"""
                 }
             }
         }
@@ -61,11 +62,11 @@ pipeline {
         stage ('Create The Docker Image & Upload To Nexus') {
             steps {
                 script {
-                    dir(angularDir) {
+                    dir(javaDir){
                         tool dockerTool
                         docker.withTool(dockerTool) {
                             docker.withRegistry(nexusUrl, dockerRegistryCredentials) {
-                                def image = docker.build("localhost:8082/repository/jump-the-queue/angular")
+                                def image = docker.buil("java")
                                 image.push("latest")
                             }
                         }
