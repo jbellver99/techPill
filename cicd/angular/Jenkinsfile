@@ -65,7 +65,7 @@ pipeline {
                         tool dockerTool
                         docker.withTool(dockerTool) {
                             docker.withRegistry(nexusUrl, dockerRegistryCredentials) {
-                                def image = docker.build("localhost:8082/repository/jump-the-queue/angular")
+                                def image = docker.build("angular")
                                 image.push("latest")
                             }
                         }
