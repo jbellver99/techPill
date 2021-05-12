@@ -6,9 +6,9 @@ pipeline {
     }
 
     environment {
-        javaDir = 'java/jtqj'
+        javaDir = 'java'
 
-        srcDir = 'java/jtqj/src'
+        workDir = 'java/jtqj'
 
         sonarTool = 'SonarScanner'
 
@@ -24,7 +24,7 @@ pipeline {
     stages {
         stage ('Install Application') {
             steps {
-                dir(javaDir) {
+                dir(workDir) {
                     sh """mvn clean install"""
                 }
             }
@@ -32,7 +32,7 @@ pipeline {
 
         stage ('Unit Tests') {
             steps {
-                dir(javaDir) {
+                dir(workDir) {
                     sh """mvn clean test"""
                 }
             }
@@ -41,7 +41,7 @@ pipeline {
         stage ('SonarQube Code Analysis') {
             steps {
                 script {
-                    dir(javaDir) {
+                    dir(workDir) {
                         withSonarQubeEnv(sonarEnv) {
                             sh """mvn sonar:sonar"""
                         }
@@ -52,7 +52,7 @@ pipeline {
 
         stage ('Build Application') {
             steps {
-                dir(javaDir) {
+                dir(workDir) {
                     sh """mvn clean package"""
                 }
             }
