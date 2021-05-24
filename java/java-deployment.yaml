@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: java-deployment
+  labels:
+    app: jump-the-queue-java
+spec:
+  selector:
+    matchLabels:
+      app: jump-the-queue-java
+  template:
+    metadata:
+      labels:
+        app: jump-the-queue-java
+    spec:
+      containers:
+      - name: jump-the-queue-java
+        image: localhost:8090/java
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 8081

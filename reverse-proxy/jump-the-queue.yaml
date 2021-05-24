@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: angular
+spec:
+  selector:
+    matchLabels:
+      app: angular
+  template:
+    metadata:
+      labels:
+        app: angular
+    spec:
+      containers:
+      - name: angular
+        image: localhost:8090/angular
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 80
+      imagePullSecrets:
+        - name: nexus-cred
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: angular-svc
+spec:
+  selector:
+    app: angular
+  ports:
+  - port: 80
+    targetPort: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: java
+spec:
+  selector:
+    matchLabels:
+      app: java
+  template:
+    metadata:
+      labels:
+        app: java
+    spec:
+      containers:
+      - name: java
+        image: localhost:8090/java
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 8081
+      imagePullSecrets:
+        - name: nexus-cred
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: java-svc
+spec:
+  selector:
+    app: java
+  ports:
+  - port: 8081
+    targetPort: 8081
+
+
