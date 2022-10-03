@@ -16,9 +16,7 @@ pipeline {
         stage('Install') {
             steps {
                 script {
-                    withMaven(maven:'Maven-3.5.2') {
-                        sh """mvn clean install"""
-                    }
+                    sh """mvn clean install"""
                 }
             }
         }
@@ -26,9 +24,7 @@ pipeline {
         stage('Test') {
             steps {
                 script {
-                    withMaven(maven:"Maven-3.5.2") {
-                        sh """mvn clean install"""
-                    }
+                    sh """mvn clean install"""
                 }
             }
         }
@@ -46,10 +42,9 @@ pipeline {
         stage('Build') {
             steps {
                 script {
-                    withMaven(maven:"Maven-3.5.2") {
-                        sh """mvn clean package"""
-                    }
+                    sh """mvn clean package"""
                 }
+
             }
         }
 
