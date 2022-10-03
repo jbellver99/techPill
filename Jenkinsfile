@@ -6,9 +6,7 @@ pipeline {
     }
 
     environment {
-        dockerfileDir = 'src/main/docker'
         sonarEnv = "SonarQube"
-        dockerTool = 'docker'
     }
 
     stages {
@@ -50,9 +48,7 @@ pipeline {
         stage('Build Docker image') {
             steps {
                 script {
-                    dir(dockerfileDir) {
-                            sh """docker build -t techPill:example Dockerfile.jvm"""
-                    }
+                    sh """docker build -t techPill:example Dockerfile.jvm"""
                 }
             }
         }
