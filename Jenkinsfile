@@ -49,9 +49,16 @@ pipeline {
         stage('Build Docker image') {
             steps {
                 script {
-                    tool dockerTool
-                    docker.withTool(dockerTool) {
-                        sh """docker build -t techPill"""
+                    withCredentials([usernamePassword(credentialsId: 'DockerHub', passwordVariable: 'password', usernameVariable: 'username')]) {
+                        tool dockerTool
+                        docker.withTool(dockerTool) {
+                            sh """
+                                docker login -u $username -p $password
+                                docker build -t techpill .
+                                docker tag techPill jbellver99/techpill:example
+                                docker push jbellver99/techpill:example
+                            """
+                        }
                     }
                 }
             }
