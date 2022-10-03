@@ -15,32 +15,40 @@ pipeline {
     stages {
         stage('Install') {
             steps {
-                withMaven(maven:'Maven-3.5.2') {
-                    sh """mvn clean install"""
+                script {
+                    withMaven(maven:'Maven-3.5.2') {
+                        sh """mvn clean install"""
+                    }
                 }
             }
         }
 
         stage('Test') {
             steps {
-                withMaven(maven:"Maven-3.5.2") {
-                    sh """mvn clean install"""
+                script {
+                    withMaven(maven:"Maven-3.5.2") {
+                        sh """mvn clean install"""
+                    }
                 }
             }
         }
 
         stage('SonarQube') {
             steps {
-                withSonarQubeEnv(sonarEnv) {
-                    sh """mvn sonar:sonar"""
+                script {
+                    withSonarQubeEnv(sonarEnv) {
+                        sh """mvn sonar:sonar"""
+                    }
                 }
             }
         }
 
         stage('Build') {
             steps {
-                withMaven(maven:"Maven-3.5.2") {
-                    sh """mvn clean package"""
+                script {
+                    withMaven(maven:"Maven-3.5.2") {
+                        sh """mvn clean package"""
+                    }
                 }
             }
         }
@@ -57,11 +65,13 @@ pipeline {
 
         stage('Upload image') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'DockerHub', passwordVariable: 'password', usernameVariable: 'username')]) {
-                    sh """
-                        docker login -u $username -p $password
-                        docker push
-                    """
+                script {
+                    withCredentials([usernamePassword(credentialsId: 'DockerHub', passwordVariable: 'password', usernameVariable: 'username')]) {
+                        sh """
+                            docker login -u $username -p $password
+                            docker push
+                        """
+                    }
                 }
             }
         }
