@@ -49,10 +49,7 @@ pipeline {
             steps {
                 script {
                     dir(dockerfileDir) {
-                        tool dockerTool
-                        docker.withTool(dockerTool) {
                             sh """docker build -t techPill:example Dockerfile.jvm"""
-                        }
                     }
                 }
             }
@@ -60,14 +57,11 @@ pipeline {
 
         stage('Upload image') {
             steps {
-                tool dockerTool
-                docker.withTool(dockerTool) {
-                    withCredentials([usernamePassword(credentialsId: 'DockerHub', passwordVariable: 'password', usernameVariable: 'username')]) {
-                        sh """
-                            docker login -u $username -p $password
-                            docker push
-                        """
-                    }
+                withCredentials([usernamePassword(credentialsId: 'DockerHub', passwordVariable: 'password', usernameVariable: 'username')]) {
+                    sh """
+                        docker login -u $username -p $password
+                        docker push
+                    """
                 }
             }
         }
