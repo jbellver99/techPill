@@ -30,7 +30,7 @@ pipeline {
             steps {
                 script {
                     withSonarQubeEnv(sonarEnv) {
-                        sh """mvn sonar:sonar -Dsoanr.projectKey="techPill""""
+                        sh """mvn sonar:sonar"""
                     }
                 }
             }
