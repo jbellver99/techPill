@@ -3,6 +3,7 @@ pipeline {
 
     tools {
         maven 'Maven-3.8.6'
+        docker 'docker'
     }
 
     environment {
@@ -30,7 +31,7 @@ pipeline {
             steps {
                 script {
                     withSonarQubeEnv(sonarEnv) {
-                        sh """mvn sonar:sonar"""
+                        sh """mvn sonar:sonar -Dsonar.projectKey=techPill -Dsonar.projectName=techPill"""
                     }
                 }
             }
