@@ -3,11 +3,11 @@ pipeline {
 
     tools {
         maven 'Maven-3.8.6'
-        docker 'docker'
     }
 
     environment {
         sonarEnv = "SonarQube"
+        dockerTool = 'docker'
     }
 
     stages {
@@ -49,19 +49,10 @@ pipeline {
         stage('Build Docker image') {
             steps {
                 script {
-                    sh """docker build -t techPill:example Dockerfile.jvm"""
-                }
-            }
-        }
-
-        stage('Upload image') {
-            steps {
-                script {
-                    withCredentials([usernamePassword(credentialsId: 'DockerHub', passwordVariable: 'password', usernameVariable: 'username')]) {
-                        sh """
-                            docker login -u $username -p $password
-                            docker push
-                        """
+                    tool dockerTool
+                    docker.withTool(dockerTool) {
+                        def image = docker.build("techPill")
+                        image.push("example")
                     }
                 }
             }
