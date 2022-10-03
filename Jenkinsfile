@@ -51,8 +51,7 @@ pipeline {
                 script {
                     tool dockerTool
                     docker.withTool(dockerTool) {
-                        def image = docker.build("techPill")
-                        image.push("example")
+                        sh """docker build -t techPill"""
                     }
                 }
             }
