@@ -8,6 +8,7 @@ pipeline {
     environment {
         sonarEnv = "SonarQube"
         dockerTool = 'docker'
+        dockerRegistryCredentials = 'DockerHub'
     }
 
     stages {
@@ -51,7 +52,7 @@ pipeline {
                 script {
                     tool dockerTool
                     docker.withTool(dockerTool) {
-                        docker.withRegistry( '', DockerHub)
+                        docker.withRegistry( '', dockerRegistryCredentials)
                             def image = docker.build("jbellver99/techpill")
                             image.push("example")
                     }
