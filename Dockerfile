@@ -1,6 +1,6 @@
 FROM maven:3.6-jdk-11 AS build
 WORKDIR /app
-COPY jtqj/ /app
+COPY . /app
 RUN mvn clean install
 
 FROM adoptopenjdk/openjdk11:jre-11.0.4_11-alpine
