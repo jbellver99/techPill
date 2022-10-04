@@ -49,12 +49,11 @@ pipeline {
         stage('Build Docker image') {
             steps {
                 script {
-                    withCredentials([usernamePassword(credentialsId: 'DockerHub', passwordVariable: 'password', usernameVariable: 'username')]) {
-                        tool dockerTool
-                        docker.withTool(dockerTool) {
+                    tool dockerTool
+                    docker.withTool(dockerTool) {
+                        docker.withRegistry( '', DockerHub)
                             def image = docker.build("jbellver99/techpill")
                             image.push("example")
-                        }
                     }
                 }
             }
