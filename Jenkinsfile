@@ -50,12 +50,11 @@ pipeline {
             steps {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'DockerHub', passwordVariable: 'password', usernameVariable: 'username')]) {
-                        sh """
-                            docker login -u $username -p $password
-                            docker build -t techpill .
-                            docker tag techPill jbellver99/techpill:example
-                            docker push jbellver99/techpill:example
-                        """
+                        tool dockerTool
+                        docker.withTool(dockerTool) {
+                            def image = docker.build("jbellver99/techPill")
+                            image.push("example")
+                        }
                     }
                 }
             }
