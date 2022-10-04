@@ -52,7 +52,7 @@ pipeline {
                     withCredentials([usernamePassword(credentialsId: 'DockerHub', passwordVariable: 'password', usernameVariable: 'username')]) {
                         tool dockerTool
                         docker.withTool(dockerTool) {
-                            def image = docker.build("jbellver99/techPill")
+                            def image = docker.build("jbellver99/techpill")
                             image.push("example")
                         }
                     }
